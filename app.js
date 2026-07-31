@@ -9,7 +9,7 @@ const icons={ホーム:'⌂',投稿:'✎',承認:'✓',予約:'◷',分析:'⌁'
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function badge(s){let c=s==='確認待ち'?'waiting':s==='修正'?'revision':s==='予約済み'?'scheduled':s==='エラー'?'error':'approved';return `<span class="status ${c}">${s}</span>`}
 function toast(t){const e=document.querySelector('#toast');e.textContent='✓ '+t;e.hidden=false;clearTimeout(window._to);window._to=setTimeout(()=>e.hidden=true,2600)}
-function settings(){try{return JSON.parse(localStorage.getItem('sol-webapp-settings')||'{}')}catch{return {}}}
+function settings(){const defaults={imageEditWebhook:'https://ing-kakogawa.app.n8n.cloud/webhook/sol-drive-image-edit'};try{const saved=JSON.parse(localStorage.getItem('sol-webapp-settings')||'{}');return {...defaults,...saved,imageEditWebhook:saved.imageEditWebhook||defaults.imageEditWebhook}}catch{return defaults}}
 function storeInfo(){return settings().storeInfo||defaultStoreInfo}
 function finalCaption(p){return [p.caption.trim(),storeInfo().trim(),p.tags.trim()].filter(Boolean).join('\n\n')}
 function sourceAsset(p){return driveAssets.find(a=>a.id===p.sourceAssetId)||null}
